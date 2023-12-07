@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utiles\CSUtiles\CSUtiles.csproj" />
+    <ProjectReference Include="..\Utiles\CSWPFUtile\CSWPFUtile.csproj" />
+    <ProjectReference Include="..\Utiles\FileIOAssist\FileIOAssist.csproj" />
+    <ProjectReference Include="..\Utiles\ImageAssist\ImageAssist.csproj" />
+    <ProjectReference Include="..\Utiles\JsonAssist\JsonAssist.csproj" />
+  </ItemGroup>
+
+</Project>

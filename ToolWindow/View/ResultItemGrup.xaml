@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="ImageHeshTools.ToolWindow.View.ResultItemGrup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageHeshTools.ToolWindow.View"
+             xmlns:imageDType="clr-namespace:ImageAssist.DataFormat;assembly=ImageAssist"
+             xmlns:data="clr-namespace:ImageHeshTools.ToolWindow.Data"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400" >
+    <UserControl.Resources>
+        <DataTemplate x:Key="DImageInfo" DataType="data:DImageInfo">
+            <materialDesign:Card Margin="5" MinHeight="50" MinWidth="50" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+                    <Image Source="{Binding Bytes}"/>
+                    <Label Grid.Row="1" Content="{Binding FilePath}" Foreground="Black"/>
+                </Grid>
+            </materialDesign:Card>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <materialDesign:Card Margin="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" Padding="0" Margin="0" Grid.Row="0">
+                <ItemsControl ItemsSource="{Binding Images, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemTemplate="{StaticResource DImageInfo}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            <Label Grid.Row="1" Content="{Binding Name}" Foreground="#DD000000"/>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>

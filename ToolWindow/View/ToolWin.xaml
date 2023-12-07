@@ -1,0 +1,148 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageHeshTools.ToolWindow.View"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:dataT="clr-namespace:ImageHeshTools.ToolWindow.Data"
+        xmlns:ViewModel="clr-namespace:ImageHeshTools.ToolWindow.ViewModel" 
+        x:Class="ImageHeshTools.ToolWindow.View.ToolWin"
+        mc:Ignorable="d" 
+        Title="Image Similarity" MinWidth="400" MinHeight="500" Width="400" Height="600" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Slider.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBlock.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/CSWPFUtile;component/CustomStyle/CScrollbarType1.xaml " />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type dataT:DWorkingFolder}">
+                <materialDesign:Card Margin="0 0 0 10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Margin="5 0">
+                            <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <materialDesign:PackIcon Height="30" Width="30" Margin="5"  Kind="Folder" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Expander Grid.Column="1" HorizontalAlignment="Stretch" Header="{Binding FullPath}">
+                            <TreeView Style="{StaticResource MaterialDesignTreeView}" ItemsSource="{Binding InnerData}">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding InnerData}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox IsChecked="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+                            </TreeView>
+                        </Expander>
+                    </Grid>
+                </materialDesign:Card>
+            </DataTemplate>
+
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <TabControl>
+        <!-- Setup -->
+        <TabItem Padding="0" Margin="0" Height="25">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="SettingsOutline"/>
+                    <TextBlock Text=" Setup"/>
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+
+                <local:ToolWinToolbox/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0" Padding="0"  Grid.Row="1">
+                    <ItemsControl ItemsSource="{Binding WorkingFolders}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Margin="10 0 10 10"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+                <ProgressBar Grid.Row="1" IsIndeterminate="True" 
+                     Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Value="50" Visibility="{Binding LoadingWorkingFolders, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
+        </TabItem>
+
+        <!-- Result -->
+        <TabItem Padding="0" Margin="0" Height="25">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="FileDocumentOutline"/>
+                    <TextBlock Text=" Result"/>
+                </StackPanel>
+            </TabItem.Header>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- View -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="{Binding GPNumber}"/>
+                        <TreeView Grid.Row="1" Style="{StaticResource MaterialDesignTreeView}" ItemsSource="{Binding ResultGrups}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <i:CallMethodAction MethodName="ResultGrupsSelectedItemChanged" TargetObject="{Binding Path=.}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type dataT:DResultGrup}" ItemsSource="{Binding InnerItem}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ItemName}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" Background="AliceBlue" ShowsPreview="True" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+                    <ContentControl Grid.Column="2" DataContext="{Binding SelectedItem}" Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}">
+                        
+                    </ContentControl>
+                </Grid>
+            </Grid>
+        </TabItem>
+    </TabControl>
+    
+   
+</Window>
